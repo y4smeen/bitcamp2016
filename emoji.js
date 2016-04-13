@@ -1,3 +1,8 @@
+// API Keys
+var face_app_key = "2a5373d6149a4c2a9404d4cbbcae85a0";
+var face_client_id = "32336ea52f4b440d8e0b870953328550";
+
+// Include JQuery
 var script = document.createElement('script');
 script.src = 'http://code.jquery.com/jquery-1.11.0.min.js';
 script.type = 'text/javascript';
@@ -22,24 +27,28 @@ function positionImage(e) {
   };
 }
 
-function getEmotion(e) {
-  var rect = e.getBoundingClientRect();
-  var params = {
-    rect.left + document.body.scrollLeft,
-    rect.top + document.body.scrollTop,
-    rect.width,
-    rect.height
-  };
-  var face = "happy";
+// function getEmotions(e) {
+//
+//   var face = "happiness";
+//   var emotions = [];
+//
+//
+//
+//   return "img/" + face + ".png";
+// }
 
-  return "img" + face;
+function randomImage() {
+  var theEmotions = ["sadness", "neutral", "disgust", "anger", "surprise", "fear", "happiness"];
+  var emotion = theEmotions[Math.floor(Math.random()*theEmotions.length)];
+  return "img/" + emotion + ".png"
 }
 
 function newImage(e) {
   var emoji = new Image();
   var rect = positionImage(e);
-  var faceSource = getEmotion(e); // chrome.extension.getURL('img/sad.png'); // :'(
-  emoji.src = chrome.extension.getURL(faceSource);
+  // var faceSource = chrome.extension.getURL(randomImage()); // :'(
+  var faceSource = chrome.extension.getURL("img/happiness.png");
+  emoji.src = faceSource;
   emoji.className = 'emojifai';
   emoji.style.position = 'absolute';
   emoji.style.zIndex = '123456';
@@ -61,31 +70,6 @@ function emojifai() {
   });
 }
 
-$(function() {
-        var params = {
-            // Request parameters
-            "faceRectangles": "{string}"
-        };
-
-        $.ajax({
-            url: "https://api.projectoxford.ai/emotion/v1.0/recognize?faceRectangles={faceRectangles}&" + $.param(params),
-            beforeSend: function(xhrObj){
-                // Request headers
-                xhrObj.setRequestHeader("Content-Type","application/json");
-                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","{subscription key}");
-            },
-            type: "POST",
-            // Request body
-            data: "{body}",
-        })
-        .done(function(data) {
-            alert("success");
-        })
-        .fail(function() {
-            alert("error");
-        });
-    });
-
-window.onload = emojifai;
+window.onclick = emojifai;
 
 setInterval(emojifai, 100)
